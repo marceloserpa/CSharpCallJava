@@ -1,3 +1,14 @@
-wraper.so:wraper.cpp 
-	g++ -shared -o wraper.so  -L/usr/lib/jvm/java-1.9.0-openjdk-amd64/lib/amd64/server  -I/usr/lib/jvm/java-9-openjdk-amd64/include -I/usr/lib/jvm/java-9-openjdk-amd64/include/linux/  ./wraper.cpp -fPIC -ljvm
-	export LD_LIBRARY_PATH=/usr/lib/jvm/java-1.9.0-openjdk-amd64/lib/amd64/server 
+
+LDLIBS = -ldl -lstdc++fs
+JAVALIB= -I/usr/lib/jvm/java-11-openjdk-amd64/include -I/usr/lib/jvm/java-11-openjdk-amd64/include/linux/
+JAVASERVER=/usr/lib/jvm/java-1.11.0-openjdk-amd64/lib/server/
+CXXFLAGS=-ljvm -fPIC 
+
+libwraper.so: wraper.cpp 
+	git -C dynamicLinker pull || git clone https://github.com/Marqin/dynamicLinker
+	make -C dynamicLinker CXX=g++
+
+	#g++ -shared -o libwraper.so  -L$(JAVASERVER) $(JAVALIB) ./wraper.cpp $(CXXFLAGS)
+	g++ -shared -o wraper.so  -L$(JAVASERVER) $(JAVALIB) ./wraper.cpp $(CXXFLAGS) -LdynamicLinker/ -ldynamicLinker $(LDLIBS)
+	
+	export LD_LIBRARY_PATH=$(JAVASERVER)

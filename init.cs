@@ -6,8 +6,8 @@ namespace invoke
     {
         [DllImport("libc.so.6")]
          private static extern int getpid();
-		 // You should edit the path of you .so lib
-        [DllImport("./wraper.so",EntryPoint="Invokejava")]
+		
+        [DllImport("wraper.so", EntryPoint="Invokejava")]
          private static extern int Invokejava(string message);
 
         static void Main(string[] args)
